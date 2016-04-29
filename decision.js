@@ -76,11 +76,19 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 						var entropy = Entropy.entropyOneAttr(infoMatrix);
 						console.log('Entropy for branch ' + b + ' is = ' + entropy)
 						if(entropy > 0){
-							newNode = Node('split', 'Unknown', branch);
+							var value = {
+								result: 'Unknown',
+								branch: b
+							}
+							newNode = Node('split', value, branch);
 						}
 						else{
 							var result = resultFromFrequency(infoMatrix);
-							newNode = Node('terminal', result.name, branch);
+							var value = {
+								result: result.name,
+								branch: b
+							}
+							newNode = Node('terminal', value, branch);
 						}
 					}
 					else{
@@ -92,22 +100,36 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 			return children;
 		},
 
+		renderTooltip: function(node){
+			return node + '';
+		},
+
 		renderNode: function(node){
-			var tds = '';
+			var results = '';
 			var nList = node.children;
 			for(var n = 0; n < nList.length; n++){
-				var val = nList[n].type.charAt(0).toUpperCase();
+				var resultName = nList[n].type.charAt(0).toUpperCase();
+				var tooltip = this.renderTooltip(nList[n]);
 				if(nList[n].children.length > 0){
 					var output = this.renderNode(nList[n]);
-					tds += '<td>' + output + '</td>';	
+					results += '<td>' + output + '</td>';	
 				}
 				else{
-					tds += '<td class="node-terminal"><div class="node-leaf">' + val + '</div></td>';
+					var notes = null;
+					var num = nList[n].contents.length;
+					if(num > 0){
+						notes = nList[n].value.result + ' (' + num + ')';
+					}
+					else{
+						notes = '...';
+					}
+					results += '<td class="node-terminal"><div class="node-split">' + nList[n].value.branch + '</div><div class="node-leaf">' + notes + '</div><div class="node-tooltip">' + tooltip + '</div></td>';
 				}
 			}
 			var html = '<table>';
-			html += '<tr><td colspan="' + nList.length + '" class="node-value">' + node.type + ': ' + node.value + '</td></tr>';
-			html += '<tr>' + tds + '</tr>';
+			console.log(node)
+			html += '<tr><td colspan="' + nList.length + '" class="node-value">' + node.value + '</td></tr>';
+			html += '<tr>' + results + '</tr>';
 			html += '</table>';
 			return html;
 		},

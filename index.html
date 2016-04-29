@@ -10,6 +10,12 @@
 				margin: 0;
 			}
 
+			body{
+				width: 98%;
+				display: block;
+				margin: 0 auto;
+			}
+
 			table{
 				width: 100%;
 				text-align: center;
@@ -19,14 +25,35 @@
 
 			td.node-value{
 				background: green;
-			}
+			}			
 
-			div.node-leaf{
-				
+			td.node-terminal:hover div.node-tooltip{
+				display: none;
 			}
 
 			td.node-terminal{
+				background: transparent;
+			}
+
+			td.node-value, td.node-terminal div{
+				padding: 10px;
+			}
+
+			div.node-split{
+				background: blue;
+
+			}
+
+			div.node-leaf{
 				background: red;
+			}
+
+			div.node-tooltip{
+				display: none;
+				background: black;
+				/*width: 200px;
+				height: 200px;
+				position: absolute;*/
 			}
 
 		</style>

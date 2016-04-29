@@ -7,18 +7,32 @@ var GolfOneAttr = {
 	no: 5
 }
 
+var GolfOutlook = {
+	sunny: {yes: 3, no: 2},
+	overcast: {yes: 4, no: 0},
+	rainy: {yes: 2, no: 3}
+}
+
 function countTotalCases(data){
 	var count = 0;
-	for(var attr in data){
-		if(data[attr]){
-			count += data[attr];
+	if(typeof data === 'number'){
+		count = data;
+	}
+	else{
+		for(var attr in data){
+			if(typeof data[attr] === 'number'){
+				count += data[attr];
+			}
+			else if(data[attr]){
+				count += countTotalCases(data[attr]);
+			}
 		}
 	}
 	return count;
 }
 
 function getFrequency(data, attr){
-	var occurences = data[attr];
+	var occurences = countTotalCases(data[attr]);
 	var total = countTotalCases(data);
 	return occurences / total;
 }
@@ -39,5 +53,22 @@ function entropyOneAttr(data){
 	return sum;
 }
 
+function entropyTwoAttr(data){
+	var sum = 0;
+	for(var attr in data){
+		if(data[attr]){
+			var outcomes = data[attr];
+			var freq = getFrequency(data, attr);
+			var entropy = entropyOneAttr(outcomes);
+			var partial = freq * entropy;
+			console.log(entropy);
+			sum += partial;
+		}
+	}
+	return sum;
+}
+
 var eGolfOne = entropyOneAttr(GolfOneAttr);
 console.log('The entropy for one attribute is: ' + eGolfOne);
+var eGolfTwo = entropyTwoAttr(GolfOutlook);
+console.log('The entropy for two attribute is: ' + eGolfTwo);

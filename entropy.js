@@ -115,7 +115,7 @@ function topInformationGain(dataSet, outcomeKey, empty){
 	var gainMap = {};
 	var emptySet = empty || {yes: 0, no: 0};
 	for(var info in matrix){
-		if(matrix[info]){
+		if(matrix[info] && info !== outcomeKey){
 			var gain = getInformationGain(matrix[info], emptySet);
 			gainMap[info] = gain;
 		}
@@ -135,6 +135,8 @@ function topInformationGain(dataSet, outcomeKey, empty){
 }
 
 var Entropy = {
+	countTotalCases: countTotalCases,
+	getFrequency: getFrequency,
 	entropyOneAttr: entropyOneAttr,
 	entropyTwoAttr: entropyTwoAttr,
 	getMatrixFromDataSet: getMatrixFromDataSet,

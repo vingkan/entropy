@@ -24,7 +24,7 @@ var target = document.getElementById('golf-tree');
 tree.render(target);
 
 console.log("BUILDING INSPECTIONS DATA");
-getData({}, 10000, function(dataSet){
+getData({}, 50, function(dataSet){
 	console.log(dataSet.length + ' data points.');
 	var outcomeKey = 'inspection_status';
 	var emptySet = {CLOSED: 0, FAILED: 0};

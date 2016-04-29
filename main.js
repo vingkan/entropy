@@ -38,6 +38,21 @@ function getFrequency(data, attr){
 }
 
 /*
+ * Dubious function
+ */
+function sumOutcomes(data, empty){
+	var sumSet = empty || {yes: 0, no: 0};
+	for(var attr in data){
+		if(data[attr]){
+			for(var tag in data[attr]){
+				sumSet[tag] += data[attr][tag];
+			}
+		}
+	}
+	return sumSet;
+}
+
+/*
  * API Points: data can be either a map or an array!
  * entropyOneAttr({y:5, n:9}) === entropyOneAttr([5, 9])
  */
@@ -68,7 +83,17 @@ function entropyTwoAttr(data){
 	return sum;
 }
 
+function getInformationGain(data){
+	var outcomeSet = sumOutcomes(data); //Dubious function
+	var targetEntropy = entropyOneAttr(outcomeSet);
+	var splitEntropy = entropyTwoAttr(data);
+	var gain = targetEntropy - splitEntropy;
+	return gain;
+}
+
 var eGolfOne = entropyOneAttr(GolfOneAttr);
 console.log('The entropy for one attribute is: ' + eGolfOne);
 var eGolfTwo = entropyTwoAttr(GolfOutlook);
 console.log('The entropy for two attribute is: ' + eGolfTwo);
+
+getInformationGain(GolfOutlook)

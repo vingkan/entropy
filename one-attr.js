@@ -23,10 +23,6 @@ function getFrequency(data, attr){
 	return occurences / total;
 }
 
-/*
- * API Points: data can be either a map or an array!
- * entropyOneAttr({y:5, n:9}) === entropyOneAttr([5, 9])
- */
 function entropyOneAttr(data){
 	var sum = 0;
 	for(var attr in data){

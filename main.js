@@ -20,8 +20,10 @@ var split = Entropy.chooseSplitPoint(GolfData, 'play', {Yes: 0, No: 0});
 console.log(split);
 
 console.log("BUILDING INSPECTIONS DATA");
-getData({}, 100, function(dataSet){
-	console.log(dataSet.length + ' data points.')
-	var split = Entropy.chooseSplitPoint(dataSet, 'inspection_status', {CLOSED: 0, FAILED: 0});
+getData({}, 1000, function(dataSet){
+	console.log(dataSet.length + ' data points.');
+	var outcome = 'inspection_status';
+	var emptySet = {CLOSED: 0, FAILED: 0};
+	var split = Entropy.chooseSplitPoint(dataSet, outcome, emptySet);
 	console.log(split);
 });

@@ -136,3 +136,5 @@ function topInformationGain(dataSet, outcomeKey, empty){
 var Entropy = {
 	chooseSplitPoint: topInformationGain
 }
+
+// Batman please forgive my ugly excuse for a module layout

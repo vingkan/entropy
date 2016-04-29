@@ -15,5 +15,13 @@ var GolfData = [
 	{outlook: 'Sunny', temp: 'Mild', humidity: 'High', windy: 'True', play: 'No'}
 ];
 
+console.log("GOLF DATA");
 var split = Entropy.chooseSplitPoint(GolfData, 'play', {Yes: 0, No: 0});
 console.log(split);
+
+console.log("OPEN DATA");
+getData({}, 10, function(dataSet){
+	console.log(dataSet.length + ' data points.')
+	var split = Entropy.chooseSplitPoint(dataSet, 'inspection_status', {CLOSED: 0, FAILED: 0});
+	console.log(split);
+});

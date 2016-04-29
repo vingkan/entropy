@@ -98,7 +98,7 @@ function getMatrixFromDataSet(dataSet, outcomeKey, empty){
 						infoMap[val][outcomeVal]++;
 					}
 					else{
-						infoMap[val] = empty || {Yes: 0, No: 0};
+						infoMap[val] = _.clone(emptySet);
 						infoMap[val][outcomeVal] = 1;
 					}
 				}
@@ -109,7 +109,7 @@ function getMatrixFromDataSet(dataSet, outcomeKey, empty){
 }
 
 function topInformationGain(dataSet, outcomeKey, empty){
-	var matrix = getMatrixFromDataSet(dataSet, outcomeKey);
+	var matrix = getMatrixFromDataSet(dataSet, outcomeKey, empty);
 	var gainMap = {};
 	var emptySet = empty || {yes: 0, no: 0};
 	for(var info in matrix){

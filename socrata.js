@@ -29,9 +29,9 @@ function handleRequestData(callback, dataList){
 			var a = {
 				inspection_status: n['inspection_status'],
 				inspection_category: n['inspection_category'],
-				department_bureau: n['department_bureau'],
-				inspector_id: n['inspector_id'],
-				violation_code: n['violation_code']
+				department_bureau: n['department_bureau']
+				/*inspector_id: n['inspector_id'],*/
+				/*violation_code: n['violation_code']*/
 			}
 			cleanList.push(a);
 		}

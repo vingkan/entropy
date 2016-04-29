@@ -73,7 +73,7 @@ function entropyTwoAttr(data){
 
 function getInformationGain(data, empty){
 	var emptySet = empty || {yes: 0, no: 0};
-	var outcomeSet = sumOutcomes(data, emptySet); //Dubious function
+	var outcomeSet = sumOutcomes(data, _.clone(emptySet)); //Dubious function
 	var targetEntropy = entropyOneAttr(outcomeSet);
 	var splitEntropy = entropyTwoAttr(data);
 	var gain = targetEntropy - splitEntropy;
@@ -98,7 +98,9 @@ function getMatrixFromDataSet(dataSet, outcomeKey, empty){
 						infoMap[val][outcomeVal]++;
 					}
 					else{
-						infoMap[val] = _.clone(emptySet);
+						var newEmptySet = _.clone(emptySet);
+						//console.log(newEmptySet)
+						infoMap[val] = newEmptySet;
 						infoMap[val][outcomeVal] = 1;
 					}
 				}
@@ -129,11 +131,13 @@ function topInformationGain(dataSet, outcomeKey, empty){
 			maxGain.gain = gain;
 		}
 	}
-	console.log(gainMap);
 	return maxGain;
 }
 
 var Entropy = {
+	entropyOneAttr: entropyOneAttr,
+	entropyTwoAttr: entropyTwoAttr,
+	getMatrixFromDataSet: getMatrixFromDataSet,
 	chooseSplitPoint: topInformationGain
 }
 

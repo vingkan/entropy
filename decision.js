@@ -20,7 +20,6 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 		init: function(){
 			this.root = Node('root', {}, this.dataSet);
 			this.root = this.handleNode(this.root);
-			console.log(this.root);
 		},
 
 		handleNode: function(node){
@@ -72,9 +71,7 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 					console.log(b)*/
 					if(split.attr !== 'NONE_DEFAULT'){
 						var infoMatrix = smolMatrix[split.attr][b]
-						console.log(infoMatrix)
 						var entropy = Entropy.entropyOneAttr(infoMatrix);
-						console.log('Entropy for branch ' + b + ' is = ' + entropy)
 						var result = resultFromFrequency(infoMatrix, this.outcomeKey);
 						if(entropy > 0){
 							var type = 'split'
@@ -105,6 +102,42 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 				}
 			}
 			return children;
+		},
+
+		traverseRules: function(){
+
+			function traverseNode(node, ruleStub){
+				var rules = [];
+				var rulePath = '';
+				var rule = ruleStub || '';
+				if(rule.length > 0){
+					rulePath = rule + ' &rarr; ' + node.value.branch;	
+				}
+				else{
+					rulePath = node.value.branch;
+				}
+				if(node.children.length > 0){
+					for(var n in node.children){
+						if(node.children[n]){
+							var childRules = traverseNode(node.children[n], rulePath);
+							rules.push.apply(rules, childRules);
+						}
+					}
+				}
+				else{
+					rulePath += ' &rarr; ' + node.value.result;
+					rulePath += ' (' + node.value.confidence.toFixed(4) + ')';
+					rules.push({
+						rule: rulePath,
+						confidence: node.value.confidence
+					});
+				}
+				return rules;
+			}
+
+			var rules = traverseNode(this.root, '');
+			return rules;
+
 		},
 
 		renderTooltip: function(node){
@@ -143,6 +176,14 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 
 		render: function(target){
 			var html = this.renderNode(this.root);
+				html += '<ul>'
+				var rules = this.traverseRules();
+				for(var r in rules){
+					if(rules[r]){
+						html += '<li style="opacity: ' + rules[r].confidence + '">' + rules[r].rule + '</li>';
+					}
+				}
+				html += '</ul>'
 			target.innerHTML = html;
 		}
 

@@ -17,21 +17,19 @@ var GolfData = [
 
 console.log("GOLF DATA");
 var split = Entropy.chooseSplitPoint(GolfData, 'play', {Yes: 0, No: 0});
-console.log(split);
 var tree = DecisionTree(GolfData, 'play', {Yes: 0, No: 0});
 tree.init();
 var target = document.getElementById('golf-tree');
 tree.render(target);
 
 console.log("BUILDING INSPECTIONS DATA");
-getData({}, 50, function(dataSet){
-	console.log(dataSet.length + ' data points.');
+getData({}, 10000, function(dataSet){
 	var outcomeKey = 'inspection_status';
 	var emptySet = {CLOSED: 0, FAILED: 0};
 	var split = Entropy.chooseSplitPoint(dataSet, outcomeKey, emptySet);
-	console.log(split);
 	var tree = DecisionTree(dataSet, outcomeKey, emptySet);
 	tree.init();
 	var target = document.getElementById('buildings-tree');
 	tree.render(target);
+	tree.traverseRules();
 });

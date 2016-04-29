@@ -3,77 +3,20 @@
 	<head>
 		<title>Entropy</title>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="style/main.css">
+		<link href='https://fonts.googleapis.com/css?family=Gafata|Titillium+Web:400,700' rel='stylesheet' type='text/css'>
+		<script type="text/javascript" src="underscore.js"></script>
 		<style>
-
-			html, body, table, tr, td{
-				padding: 0;
-				margin: 0;
-			}
-
-			body{
-				width: 98%;
-				display: block;
-				margin: 0 auto;
-			}
-
-			table{
-				width: 100%;
-				text-align: center;
-				color: white;
-			}
-
-			td{
-				vertical-align: top;
-			}
-
-			div.branch{
-				color: black;
-				font-weight: bold;
-			}
-
-			td.node-value{
-				background: green;
-			}			
-
-			td.node-terminal:hover div.node-tooltip{
-				display: none;
-			}
-
-			td.node-terminal{
-				background: transparent;
-			}
-
-			td.node-value, td.node-terminal div{
-				padding: 10px;
-			}
-
-			div.node-split{
-				background: blue;
-
-			}
-
-			div.node-leaf{
-				background: red;
-			}
-
-			div.node-tooltip{
-				display: none;
-				background: black;
-				/*width: 200px;
-				height: 200px;
-				position: absolute;*/
-			}
 
 		</style>
 	</head>
 	<body>
 
-		<script type="text/javascript" src="underscore.js"></script>
-
-		<h1>Should I go golfing?</h1>
+		<!-- <h1>Should I go golfing?</h1> -->
 		<div id="golf-tree"></div>
 		<h1>Will the building pass inspection?</h1>
-		<div id="buildings-tree"></div>
+		<div id="buildings-tree">
+		</div>
 
 		<script type="text/javascript" src="socrata.js"></script>
 		<script type="text/javascript" src="entropy.js"></script>

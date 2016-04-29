@@ -15,21 +15,33 @@ var GolfData = [
 	{outlook: 'Sunny', temp: 'Mild', humidity: 'High', windy: 'True', play: 'No'}
 ];
 
-console.log("GOLF DATA");
+/*console.log("GOLF DATA");
 var split = Entropy.chooseSplitPoint(GolfData, 'play', {Yes: 0, No: 0});
 var tree = DecisionTree(GolfData, 'play', {Yes: 0, No: 0});
 tree.init();
 var target = document.getElementById('golf-tree');
-tree.render(target);
+tree.render(target);*/
 
-console.log("BUILDING INSPECTIONS DATA");
-getData({}, 10000, function(dataSet){
-	var outcomeKey = 'inspection_status';
-	var emptySet = {CLOSED: 0, FAILED: 0};
-	var split = Entropy.chooseSplitPoint(dataSet, outcomeKey, emptySet);
-	var tree = DecisionTree(dataSet, outcomeKey, emptySet);
-	tree.init();
-	var target = document.getElementById('buildings-tree');
-	tree.render(target);
-	tree.traverseRules();
+var count = 1000;
+var url = "https://data.cityofchicago.org/resource/ucdv-yd74.json";
+getData(url, {}, count,
+	function(data){
+		if(data['inspection_status'] !== 'CLOSED'){
+			data['inspection_status'] = 'FAILED';
+		}
+		var clean = {
+			inspection_status: data['inspection_status'],
+			inspection_category: data['inspection_category'],
+			department_bureau: data['department_bureau']
+		}
+		return clean;
+	},
+	function(dataSet){
+		var outcomeKey = 'inspection_status';
+		var emptySet = {CLOSED: 0, FAILED: 0};
+		var tree = DecisionTree(dataSet, outcomeKey, emptySet);
+		tree.init();
+		var target = document.getElementById('buildings-tree');
+		tree.render(target);
+		tree.traverseRules();
 });

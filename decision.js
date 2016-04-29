@@ -176,6 +176,7 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 
 		render: function(target){
 			var html = this.renderNode(this.root);
+				html += '<h2>Decision Rules</h2>'
 				html += '<ul>'
 				var rules = this.traverseRules();
 				for(var r in rules){

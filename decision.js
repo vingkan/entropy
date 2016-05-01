@@ -159,7 +159,7 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 					var num = nList[n].contents.length;
 					var confidence = nList[n].value.confidence.toFixed(4);
 					if(num > 0){
-						notes = nList[n].value.result + ' (' + confidence + ')';
+						notes = nList[n].value.result + ' (' + num + ')';
 					}
 					else{
 						notes = '...';

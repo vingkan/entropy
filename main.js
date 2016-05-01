@@ -22,7 +22,7 @@ tree.init();
 var target = document.getElementById('golf-tree');
 tree.render(target);*/
 
-var count = 1000;
+var count = 10000;
 var url = "https://data.cityofchicago.org/resource/ucdv-yd74.json";
 getData(url, {}, count,
 	function(data){

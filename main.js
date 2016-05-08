@@ -23,7 +23,7 @@ var target = document.getElementById('golf-tree');
 tree.render(target);*/
 
 var start = Date.now();
-var count = 10000;
+var count = 1000;
 var url = "https://data.cityofchicago.org/resource/ucdv-yd74.json";
 getData(url, {}, count,
 	function(data){
@@ -31,20 +31,22 @@ getData(url, {}, count,
 			data['inspection_status'] = 'FAILED';
 		}
 		var clean = {
-			inspection_status: data['inspection_status'],
-			inspection_category: data['inspection_category'],
-			department_bureau: data['department_bureau']
+			status: data['inspection_status'],
+			category: data['inspection_category'],
+			department: data['department_bureau']
 		}
 		return clean;
 	},
 	function(dataSet){
-		var outcomeKey = 'inspection_status';
-		var emptySet = {CLOSED: 0, FAILED: 0};
-		var tree = DecisionTree(outcomeKey, emptySet);
+		console.log('Cleaned in ' + (Date.now() - start) + ' ms.');
+		start = Date.now()
+		var tree = DecisionTree({
+			outcomeKey: 'status',
+			emptySet: {CLOSED: 0, FAILED: 0}
+		});
 		tree.train(dataSet);
-		var target = document.getElementById('buildings-tree');
-		tree.render(target);
-		tree.traverseRules();
-		var end = Date.now();
-		console.log('Trained: ' + (end - start) + ' ms')
+		console.log('Trained in ' + (Date.now() - start) + ' ms.');
+		start = Date.now()
+		tree.render(document.getElementById('buildings-tree'));
+		console.log('Rendered in ' + (Date.now() - start) + ' ms.');
 });

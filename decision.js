@@ -7,10 +7,10 @@ function Node(type, value, contents, children){
 	}
 }
 
-function DecisionTree(outcomeKey, emptySet){
+function DecisionTree(config){
 	return {
-		outcomeKey: outcomeKey, 
-		emptySet: emptySet,
+		outcomeKey: config.outcomeKey, 
+		emptySet: config.emptySet,
 		root: null,
 
 		train: function(dataSet){
@@ -110,9 +110,9 @@ function DecisionTree(outcomeKey, emptySet){
 				}
 				else{
 					rulePath += ' &rarr; ' + node.value.result;
-					rulePath += ' (' + node.value.confidence.toFixed(4) + ')';
 					rules.push({
 						rule: rulePath,
+						size: node.contents.length,
 						confidence: node.value.confidence
 					});
 				}
@@ -163,9 +163,22 @@ function DecisionTree(outcomeKey, emptySet){
 				html += '<h2>Decision Rules</h2>'
 				html += '<ul>'
 				var rules = this.traverseRules();
+				rules = rules.sort(function(a, b){
+					var aConf = a.confidence * a.size;
+					var bConf = b.confidence * b.size;
+					return bConf - aConf;
+				});
 				for(var r in rules){
 					if(rules[r]){
-						html += '<li style="opacity: ' + rules[r].confidence + '">' + rules[r].rule + '</li>';
+						content = rules[r].rule;
+						stats = ' (n: ' + rules[r].size + ', p: ' + (1.0 - rules[r].confidence).toFixed(4) + ')';
+						if(rules[r].confidence < 0.95){
+							content += stats;
+						}
+						else{
+							content += '<span class="confident">' + stats + '</span>';
+						}
+						html += '<li style="opacity: ' + rules[r].confidence + '">' + content + '</li>';
 					}
 				}
 				html += '</ul>'

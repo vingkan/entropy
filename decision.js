@@ -7,22 +7,18 @@ function Node(type, value, contents, children){
 	}
 }
 
-var countem = 0;
-
-function DecisionTree(dataSet, outcomeKey, emptySet){
+function DecisionTree(outcomeKey, emptySet){
 	return {
-		dataSet: dataSet,
 		outcomeKey: outcomeKey, 
 		emptySet: emptySet,
-
 		root: null,
 
-		init: function(){
-			this.root = Node('root', {}, this.dataSet);
-			this.root = this.handleNode(this.root);
+		train: function(dataSet){
+			this.root = Node('root', {}, dataSet);
+			this.root = this.trainNode(this.root);
 		},
 
-		handleNode: function(node){
+		trainNode: function(node){
 			var split = Entropy.chooseSplitPoint(node.contents, this.outcomeKey, this.emptySet);
 			if(split.attr !== 'NONE_DEFAULT'){
 				node.value.result = split.attr;
@@ -32,7 +28,7 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 			var children = this.getChildren(branches, split);
 			for(var n in children){
 				if(children[n] && children[n].type === 'split'){
-					var decisionNode = this.handleNode(children[n]);
+					var decisionNode = this.trainNode(children[n]);
 					node.children.push(decisionNode);
 				}
 				else if(children[n]){
@@ -66,9 +62,6 @@ function DecisionTree(dataSet, outcomeKey, emptySet){
 					var newNode = null;
 					var branch = branches[b];
 					var smolMatrix = Entropy.getMatrixFromDataSet(branch, this.outcomeKey, this.emptySet);
-					/*console.log(smolMatrix)
-					console.log(split.attr)
-					console.log(b)*/
 					if(split.attr !== 'NONE_DEFAULT'){
 						var infoMatrix = smolMatrix[split.attr][b]
 						var entropy = Entropy.entropyOneAttr(infoMatrix);

@@ -176,7 +176,7 @@ td.node-terminal{
 }
 
 td.node-value, td.node-terminal div{
-	padding: 10px;
+	padding: 7.5px;
 }
 
 div.node-split{
@@ -249,14 +249,19 @@ span.confident{
 	transform: translate(-50%, -50%);
 }
 
-div.loading-ball{
-	.FullCenter();
-	z-index: 20;
-	background: @LeafColor;
-	border-radius: 50%;
-	@min: 100px;
-	@max: 300px;
-	width: @min;
-	height: @min;
-	.PulsingBall(1s, @max, @min);
+
+body.loading{
+
+	div.loading-ball{
+		.FullCenter();
+		z-index: 20;
+		background: @LeafColor;
+		border-radius: 50%;
+		@min: 100px;
+		@max: 300px;
+		width: @min;
+		height: @min;
+		.PulsingBall(1s, @max, @min);
+	}
+
 }

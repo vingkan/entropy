@@ -58,32 +58,40 @@ function DecisionTree(config){
 
 		getChildren: function(branches, split){
 			var children = [];
-			for(var b in branches){
-				if(branches[b]){
-					var newNode = null;
-					var branch = branches[b];
-					var smolMatrix = Entropy.getMatrixFromDataSet(branch, this.outcomeKey, this.emptySet);
-					//if(split.attr !== 'NONE_DEFAULT')
-					var infoMatrix = smolMatrix[split.attr][b]
-					var entropy = Entropy.entropyOneAttr(infoMatrix);
-					var result = resultFromFrequency(infoMatrix, this.outcomeKey);
-					var value = {
-						result: result.name,
-						branch: b,
-						confidence: result.confidence
-					}
-					var type = 'split'
-					if(entropy > 0){
-						var hasSplit = Entropy.chooseSplitPoint(branch, this.outcomeKey, this.emptySet);
-						if(hasSplit.attr === 'NONE_DEFAULT'){
+			if(split.attr !== 'NONE_DEFAULT'){
+				for(var b in branches){
+					if(branches[b]){
+						var newNode = null;
+						var branch = branches[b];
+						var smolMatrix = Entropy.getMatrixFromDataSet(branch, this.outcomeKey, this.emptySet);
+						try{
+							var infoMatrix = smolMatrix[split.attr][b]
+						}
+						catch(e){
+							console.warn(e);
+							console.log(smolMatrix)
+						}
+						var entropy = Entropy.entropyOneAttr(infoMatrix);
+						var result = resultFromFrequency(infoMatrix, this.outcomeKey);
+						var value = {
+							result: result.name,
+							attr: split.attr,
+							branch: b,
+							confidence: result.confidence
+						}
+						var type = 'split'
+						if(entropy > 0){
+							var hasSplit = Entropy.chooseSplitPoint(branch, this.outcomeKey, this.emptySet);
+							if(hasSplit.attr === 'NONE_DEFAULT'){
+								type = 'terminal'
+							}
+						}
+						else{
 							type = 'terminal'
 						}
+						newNode = Node(type, value, branch);
+						children.push(newNode);
 					}
-					else{
-						type = 'terminal'
-					}
-					newNode = Node(type, value, branch);
-					children.push(newNode);
 				}
 			}
 			return children;
@@ -95,11 +103,15 @@ function DecisionTree(config){
 				var rules = [];
 				var rulePath = '';
 				var rule = ruleStub || '';
+				var nodeRuleContent = '';
+				if(node.value.attr && node.value.branch){
+					nodeRuleContent = node.value.attr + ': ' + node.value.branch;
+				}
 				if(rule.length > 0){
-					rulePath = rule + ' &rarr; ' + node.value.branch;	
+					rulePath = rule + ' &rarr; ' + nodeRuleContent;	
 				}
 				else{
-					rulePath = node.value.branch;
+					rulePath = nodeRuleContent;
 				}
 				if(node.children.length > 0){
 					for(var n in node.children){

@@ -33,6 +33,7 @@ function buildTreeFromData(config){
 	var empty = {};
 		empty[config.success] = 0;
 		empty[config.failure] = 0;
+	config.attributes.push(config.outcome);
 	getData(config.url, {}, config.size,
 		function(data){
 			if(data[config.outcome] !== config.success){

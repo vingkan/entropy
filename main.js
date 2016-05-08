@@ -15,12 +15,13 @@ var GolfData = [
 	{outlook: 'Sunny', temp: 'Mild', humidity: 'High', windy: 'True', play: 'No'}
 ];
 
-/*console.log("GOLF DATA");
-var split = Entropy.chooseSplitPoint(GolfData, 'play', {Yes: 0, No: 0});
-var tree = DecisionTree(GolfData, 'play', {Yes: 0, No: 0});
-tree.init();
-var target = document.getElementById('golf-tree');
-tree.render(target);*/
+var tree = DecisionTree({
+	title: 'Should I play golf today?',
+	outcomeKey: 'play',
+	emptySet: {Yes: 0, No: 0}
+});
+tree.train(GolfData);
+tree.render();
 
 var start = Date.now();
 var count = 1000;
@@ -41,12 +42,13 @@ getData(url, {}, count,
 		console.log('Cleaned in ' + (Date.now() - start) + ' ms.');
 		start = Date.now()
 		var tree = DecisionTree({
+			title: "Will the building pass inspection?",
 			outcomeKey: 'status',
 			emptySet: {CLOSED: 0, FAILED: 0}
 		});
 		tree.train(dataSet);
 		console.log('Trained in ' + (Date.now() - start) + ' ms.');
 		start = Date.now()
-		tree.render(document.getElementById('buildings-tree'));
+		tree.render();
 		console.log('Rendered in ' + (Date.now() - start) + ' ms.');
 });

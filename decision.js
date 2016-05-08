@@ -9,6 +9,7 @@ function Node(type, value, contents, children){
 
 function DecisionTree(config){
 	return {
+		title: config.title || "Decision Tree",
 		outcomeKey: config.outcomeKey, 
 		emptySet: config.emptySet,
 		root: null,
@@ -158,10 +159,13 @@ function DecisionTree(config){
 			return html;
 		},
 
-		render: function(target){
-			var html = this.renderNode(this.root);
-				html += '<h2>Decision Rules</h2>'
-				html += '<ul>'
+		render: function(targetID){
+			var target = document.getElementById(targetID);
+			var html = ''
+				html += '<h1>' + this.title + '</h1>';
+				html += this.renderNode(this.root);
+				html += '<h2>Decision Rules</h2>';
+				html += '<ul>';
 				var rules = this.traverseRules();
 				rules = rules.sort(function(a, b){
 					var aConf = a.confidence * a.size;
@@ -182,7 +186,14 @@ function DecisionTree(config){
 					}
 				}
 				html += '</ul>'
-			target.innerHTML = html;
+			if(target){
+				target.innerHTML = html;
+			}
+			else{
+				var div = document.createElement('div');
+				div.innerHTML = html;
+				document.body.appendChild(div);
+			}
 		}
 
 	}

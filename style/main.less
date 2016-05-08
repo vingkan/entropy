@@ -224,23 +224,22 @@ span.confident{
 	animation: circularRotation @time linear infinite;
 }
 
-.PulsingBall(@time: 4s, @size: 300px){
+.PulsingBall(@time: 4s, @max: 300px, @min: 100px){
 	@-webkit-keyframes pulse{
 		0&{
-			width: 0 * @size;
-			height: 0 * @size;
-			-webkit-transform: rotate(0deg);
+			width: @min;
+			height: @min;
 		}
 		50%{
-			width: @size;
-			height: @size;
+			width: @max;
+			height: @max;
 		}
 		100%{
-			width: 0 * @size;
-			height: 0 * @size;
+			width: @min;
+			height: @min;
 		}
 	}
-	animation: pulse @time ease infinite;
+	animation: pulse @time ease-in-out infinite;
 }
 
 .FullCenter(){
@@ -250,12 +249,14 @@ span.confident{
 	transform: translate(-50%, -50%);
 }
 
-/*div.loading div.loading-ball{
+div.loading-ball{
 	.FullCenter();
 	z-index: 20;
 	background: @LeafColor;
-	width: 20px;
-	height: 20px;
 	border-radius: 50%;
-	.PulsingBall();
-}*/
+	@min: 100px;
+	@max: 300px;
+	width: @min;
+	height: @min;
+	.PulsingBall(1s, @max, @min);
+}

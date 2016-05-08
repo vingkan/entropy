@@ -62,35 +62,26 @@ function DecisionTree(outcomeKey, emptySet){
 					var newNode = null;
 					var branch = branches[b];
 					var smolMatrix = Entropy.getMatrixFromDataSet(branch, this.outcomeKey, this.emptySet);
-					if(split.attr !== 'NONE_DEFAULT'){
-						var infoMatrix = smolMatrix[split.attr][b]
-						var entropy = Entropy.entropyOneAttr(infoMatrix);
-						var result = resultFromFrequency(infoMatrix, this.outcomeKey);
-						if(entropy > 0){
-							var type = 'split'
-							var hasSplit = Entropy.chooseSplitPoint(branch, this.outcomeKey, this.emptySet);
-							if(hasSplit.attr === 'NONE_DEFAULT'){
-								type = 'terminal'
-							}
-							var value = {
-								result: result.name,
-								branch: b,
-								confidence: result.confidence
-							}
-							newNode = Node(type, value, branch);
-						}
-						else{
-							var value = {
-								result: result.name,
-								branch: b,
-								confidence: result.confidence
-							}
-							newNode = Node('terminal', value, branch);
+					//if(split.attr !== 'NONE_DEFAULT')
+					var infoMatrix = smolMatrix[split.attr][b]
+					var entropy = Entropy.entropyOneAttr(infoMatrix);
+					var result = resultFromFrequency(infoMatrix, this.outcomeKey);
+					var value = {
+						result: result.name,
+						branch: b,
+						confidence: result.confidence
+					}
+					var type = 'split'
+					if(entropy > 0){
+						var hasSplit = Entropy.chooseSplitPoint(branch, this.outcomeKey, this.emptySet);
+						if(hasSplit.attr === 'NONE_DEFAULT'){
+							type = 'terminal'
 						}
 					}
 					else{
-						console.log('AHHH')
+						type = 'terminal'
 					}
+					newNode = Node(type, value, branch);
 					children.push(newNode);
 				}
 			}

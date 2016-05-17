@@ -12,6 +12,7 @@ function DecisionTree(config){
 		title: config.title || "Decision Tree",
 		outcomeKey: config.outcomeKey, 
 		emptySet: config.emptySet,
+		attributes: config.attributes,
 		root: null,
 
 		train: function(dataSet){
@@ -143,9 +144,11 @@ function DecisionTree(config){
 			for(var n = 0; n < nList.length; n++){
 				var resultName = nList[n].type.charAt(0).toUpperCase();
 				var tooltip = this.renderTooltip(nList[n]);
+				var splitName = this.attributes[node.value.result];
+				var branchName = nList[n].value.branch;
 				if(nList[n].children.length > 0){
 					var output = this.renderNode(nList[n]);
-					results += '<td class="node-terminal"><div class="branch">|</div><div class="node-split">' + nList[n].value.branch + '</div>' + output + '</td>';	
+					results += '<td class="node-terminal"><div class="branch">|</div><div class="node-split">' + branchName + '</div>' + output + '</td>';	
 				}
 				else{
 					var notes = null;
@@ -157,11 +160,11 @@ function DecisionTree(config){
 					else{
 						notes = '...';
 					}
-					results += '<td class="node-terminal"><div class="branch">|</div><div class="node-split">' + nList[n].value.branch + '</div><div class="node-leaf" style="opacity: ' + confidence + '">' + notes + '</div><div class="node-tooltip">' + tooltip + '</div></td>';
+					results += '<td class="node-terminal"><div class="branch">|</div><div class="node-split">' + branchName + '</div><div class="node-leaf" style="opacity: ' + confidence + '">' + notes + '</div><div class="node-tooltip">' + tooltip + '</div></td>';
 				}
 			}
 			var html = '<table class="tree">';
-			html += '<tr><td colspan="' + nList.length + '" class="node-value">' + node.value.result + '</td></tr>';
+			html += '<tr><td colspan="' + nList.length + '" class="node-value">' + splitName + '</td></tr>';
 			html += '<tr>' + results + '</tr>';
 			html += '</table>';
 			return html;
@@ -188,7 +191,7 @@ function DecisionTree(config){
 			var arrow = ' &rarr; ';
 			for(var r = 0; r < rule.path.length; r++){
 				var step = rule.path[r];
-				res += step.attr + ': ' + step.value;
+				res += this.attributes[step.attr] + ': ' + step.value;
 				if(!(r === (rule.path.length-1))){
 					res += arrow;
 				}

@@ -33,16 +33,15 @@ function buildTreeFromData(config){
 	var empty = {};
 		empty[config.success] = 0;
 		empty[config.failure] = 0;
-	config.attributes.push(config.outcome);
+	config.attributes[config.outcome] = config.outcome;
 	getData(config.url, {}, config.size,
 		function(data){
 			if(data[config.outcome] !== config.success){
 				data[config.outcome] = config.failure;
 			}
 			clean = {}
-			for(var k in config.attributes){
-				var key = config.attributes[k];
-				if(key){
+			for(var key in config.attributes){
+				if(config.attributes[key]){
 					clean[key] = data[key]
 				}
 			}
@@ -52,6 +51,7 @@ function buildTreeFromData(config){
 			var tree = DecisionTree({
 				title: config.title,
 				outcomeKey: config.outcome,
+				attributes: config.attributes,
 				emptySet: empty
 			});
 			tree.train(dataSet);

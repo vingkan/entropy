@@ -5,17 +5,25 @@ buildTreeFromData({
 	outcome: 'inspection_status',
 	success: 'CLOSED',
 	failure: 'FAILED',
-	attributes: ['inspection_status', 'inspection_category', 'department_bureau']
+	attributes: {
+		'inspection_status': 'Status',
+		'inspection_category': 'Category',
+		'department_bureau': 'Bureau',
+	}
 });
 
-/*buildTreeFromData({
+buildTreeFromData({
 	title: 'Will the sanitation complaint be closed?',
 	url: 'https://data.cityofchicago.org/resource/kcdz-f29q.json',
 	size: 10000,
 	outcome: 'status',
 	success: 'Completed',
 	failure: 'Open',
-	attributes: ['ward', 'police_district', 'community_area']
+	attributes: {
+		'ward': 'Ward',
+		'police_district': 'District',
+		'community_area': 'Community'
+	}
 });
 
 buildTreeFromData({
@@ -25,5 +33,10 @@ buildTreeFromData({
 	outcome: 'permit_status',
 	success: 'C',
 	failure: 'X',
-	attributes: ['permit_type_description', 'mmrp_zone', 'community_area', 'ward']
-});*/
+	attributes: {
+		'permit_type_description': 'Description',
+		'mmrp_zone': 'Zone',
+		'community_area': 'Community',
+		'ward': 'Ward'
+	}
+});

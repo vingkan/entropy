@@ -99,32 +99,28 @@ function DecisionTree(config){
 
 		traverseRules: function(){
 
-			function traverseNode(node, ruleStub){
+			function traverseNode(node, pathList){
 				var rules = [];
-				var rulePath = '';
-				var rule = ruleStub || '';
-				var nodeRuleContent = '';
+				var path = pathList || [];
 				if(node.value.attr && node.value.branch){
-					nodeRuleContent = node.value.attr + ': ' + node.value.branch;
-				}
-				if(rule.length > 0){
-					rulePath = rule + ' &rarr; ' + nodeRuleContent;	
-				}
-				else{
-					rulePath = nodeRuleContent;
+					path.push({
+						attr: node.value.attr,
+						value: node.value.branch
+					});
 				}
 				if(node.children.length > 0){
 					for(var n in node.children){
 						if(node.children[n]){
-							var childRules = traverseNode(node.children[n], rulePath);
+							var pathStub = _.clone(path);
+							var childRules = traverseNode(node.children[n], pathStub);
 							rules.push.apply(rules, childRules);
 						}
 					}
 				}
 				else{
-					rulePath += ' &rarr; ' + node.value.result;
 					rules.push({
-						rule: rulePath,
+						path: path,
+						result: node.value.result,
 						size: node.contents.length,
 						confidence: node.value.confidence
 					});
@@ -132,7 +128,7 @@ function DecisionTree(config){
 				return rules;
 			}
 
-			var rules = traverseNode(this.root, '');
+			var rules = traverseNode(this.root, []);
 			return rules;
 
 		},
@@ -176,17 +172,44 @@ function DecisionTree(config){
 			var html = ''
 				html += '<h1>' + this.title + '</h1>';
 				html += this.renderNode(this.root);
-				html += '<h2>Decision Rules</h2>';
+				html += this.renderRules();
+			if(target){
+				target.innerHTML = html;
+			}
+			else{
+				var div = document.createElement('div');
+				div.innerHTML = html;
+				document.body.appendChild(div);
+			}
+		},
+
+		ruleToString: function(rule){
+			var res = '';
+			var arrow = ' &rarr; ';
+			for(var r = 0; r < rule.path.length; r++){
+				var step = rule.path[r];
+				res += step.attr + ': ' + step.value;
+				if(!(r === (rule.path.length-1))){
+					res += arrow;
+				}
+			}
+			return res;
+		},
+
+		renderRules: function(){
+			var rules = this.traverseRules();
+			console.log(rules[0])
+			rules = rules.sort(function(a, b){
+				var aConf = a.confidence * a.size;
+				var bConf = b.confidence * b.size;
+				return bConf - aConf;
+			});
+			var html = '';
+			html += '<h2>Decision Rules</h2>';
 				html += '<ul>';
-				var rules = this.traverseRules();
-				rules = rules.sort(function(a, b){
-					var aConf = a.confidence * a.size;
-					var bConf = b.confidence * b.size;
-					return bConf - aConf;
-				});
 				for(var r in rules){
 					if(rules[r]){
-						content = rules[r].rule;
+						content = this.ruleToString(rules[r]);
 						stats = ' (n: ' + rules[r].size + ', p: ' + (1.0 - rules[r].confidence).toFixed(4) + ')';
 						if(rules[r].confidence < 0.95){
 							content += stats;
@@ -198,14 +221,7 @@ function DecisionTree(config){
 					}
 				}
 				html += '</ul>'
-			if(target){
-				target.innerHTML = html;
-			}
-			else{
-				var div = document.createElement('div');
-				div.innerHTML = html;
-				document.body.appendChild(div);
-			}
+			return html;
 		}
 
 	}

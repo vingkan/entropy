@@ -1,14 +1,14 @@
 buildTreeFromData({
 	title: 'Will the building pass inspection?',
 	url: 'https://data.cityofchicago.org/resource/ucdv-yd74.json',
-	size: 10000,
+	size: 1000,
 	outcome: 'inspection_status',
 	success: 'CLOSED',
 	failure: 'FAILED',
 	attributes: ['inspection_status', 'inspection_category', 'department_bureau']
 });
 
-buildTreeFromData({
+/*buildTreeFromData({
 	title: 'Will the sanitation complaint be closed?',
 	url: 'https://data.cityofchicago.org/resource/kcdz-f29q.json',
 	size: 10000,
@@ -26,4 +26,4 @@ buildTreeFromData({
 	success: 'C',
 	failure: 'X',
 	attributes: ['permit_type_description', 'mmrp_zone', 'community_area', 'ward']
-});
+});*/

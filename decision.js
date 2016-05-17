@@ -196,6 +196,23 @@ function DecisionTree(config){
 			return res;
 		},
 
+		ruleToTable: function(rule){
+			var res = '<table class="rule-path">';
+				var attrs = '';
+				var values = '';
+				for(var r in rule.path){
+					if(rule.path[r]){
+						var step = rule.path[r];
+						attrs += '<th>' + step.attr + '</th>';
+						values += '<td>' + step.value + '</td>';
+					}
+				}
+				res += '<tr>' + attrs + '</tr>';
+				res += '<tr>' + values + '</tr>';
+			res += '</table>';
+			return res;
+		},
+
 		renderRules: function(){
 			var rules = this.traverseRules();
 			rules = rules.sort(function(a, b){

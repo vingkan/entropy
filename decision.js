@@ -160,7 +160,7 @@ function DecisionTree(config){
 					results += '<td class="node-terminal"><div class="branch">|</div><div class="node-split">' + nList[n].value.branch + '</div><div class="node-leaf" style="opacity: ' + confidence + '">' + notes + '</div><div class="node-tooltip">' + tooltip + '</div></td>';
 				}
 			}
-			var html = '<table>';
+			var html = '<table class="tree">';
 			html += '<tr><td colspan="' + nList.length + '" class="node-value">' + node.value.result + '</td></tr>';
 			html += '<tr>' + results + '</tr>';
 			html += '</table>';
@@ -198,7 +198,6 @@ function DecisionTree(config){
 
 		renderRules: function(){
 			var rules = this.traverseRules();
-			console.log(rules[0])
 			rules = rules.sort(function(a, b){
 				var aConf = a.confidence * a.size;
 				var bConf = b.confidence * b.size;
@@ -206,21 +205,30 @@ function DecisionTree(config){
 			});
 			var html = '';
 			html += '<h2>Decision Rules</h2>';
-				html += '<ul>';
+				html += '<table class="rules">';
+				html += '<tr>';
+					html += '<td><h3>Rule</h3></td>';
+					html += '<td><h3>Result</h3></td>';
+					html += '<td><h3>n</h3></td>';
+					html += '<td><h3>p</h3></td>';
+				html += '</tr>';
 				for(var r in rules){
 					if(rules[r]){
-						content = this.ruleToString(rules[r]);
-						stats = ' (n: ' + rules[r].size + ', p: ' + (1.0 - rules[r].confidence).toFixed(4) + ')';
-						if(rules[r].confidence < 0.95){
-							content += stats;
+						var rule = rules[r];
+						var row = '';
+						var rulesCell = '<td>' + this.ruleToString(rules[r]) + '</td>';
+						var resCell = '<td>' + rule.result + '</td>';
+						var nCell = '<td>' + rules[r].size + '</td>';
+						var pCell = '<td>' + (1.0 - rules[r].confidence).toFixed(4) + '</td>';
+						if(rules[r].confidence >= 0.95){
+							nCell = '<td><span class="confident">' + rules[r].size + '</span></td>';
+							pCell = '<td><span class="confident">' + (1.0 - rules[r].confidence).toFixed(4) + '</span></td>';
 						}
-						else{
-							content += '<span class="confident">' + stats + '</span>';
-						}
-						html += '<li style="opacity: ' + rules[r].confidence + '">' + content + '</li>';
+						row = rulesCell + resCell + nCell + pCell;
+						html += '<tr style="opacity: ' + rules[r].confidence + '">' + row + '</tr>';
 					}
 				}
-				html += '</ul>'
+				html += '</table>'
 			return html;
 		}
 
